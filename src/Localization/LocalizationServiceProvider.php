@@ -5,7 +5,7 @@ namespace Administr\Localization;
 use Blade;
 use Illuminate\Support\ServiceProvider;
 
-class LocalizeServiceProvider extends ServiceProvider
+class LocalizationServiceProvider extends ServiceProvider
 {
     public function boot()
     {

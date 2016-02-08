@@ -5,7 +5,7 @@ namespace Administr\Localization;
 use Administr\Localization\Models\Language;
 use Closure;
 
-class LocalizeMiddleware
+class LocalizationMiddleware
 {
     /**
      * Handle an incoming request.

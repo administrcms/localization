@@ -5,7 +5,7 @@ namespace Administr\Localization;
 
 use Illuminate\Support\Facades\Facade;
 
-class LocalizeFacade extends Facade
+class LocalizationFacade extends Facade
 {
     /**
      * Get the registered name of the component.
