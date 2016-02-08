@@ -9,8 +9,6 @@ class LocalizationServiceProvider extends ServiceProvider
 {
     public function boot()
     {
-        $this->mergeConfigFrom();
-
         $this->publishes([
             __DIR__ . '/Database/migrations' => database_path('migrations')
         ], 'migrations');
