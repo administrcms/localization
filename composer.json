@@ -12,10 +12,10 @@
     },
     "autoloading": {
         "psr-4": {
-            "Administr\\": "src/"
+            "Administr\\Localization\\": "src/"
         },
         "files": [
-            "src/Localization/helpers.php"
+            "src/helpers.php"
         ]
     }
 }
