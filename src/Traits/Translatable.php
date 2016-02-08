@@ -3,8 +3,9 @@
 namespace Administr\Localization\Traits;
 
 use Administr\Localization\Models\Language;
+use Illuminate\Database\Eloquent\Model;
 
-trait Translatable
+class Translatable extends Model
 {
     protected $translatable = [];
     protected $transaltionModel = null;
