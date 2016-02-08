@@ -13,6 +13,9 @@
     "autoloading": {
         "psr-4": {
             "Administr\\": "src/"
-        }
+        },
+        "files": [
+            "src/Localization/helpers.php"
+        ]
     }
 }
