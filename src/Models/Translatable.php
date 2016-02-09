@@ -101,6 +101,29 @@ abstract class Translatable extends Model
     }
 
     /**
+     * Add the translated fields to the model when cast to an array.
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        $attributes = parent::toArray();
+        $hiddenAttributes = $this->getHidden();
+
+        foreach ($this->translatable as $field) {
+            if (in_array($field, $hiddenAttributes)) {
+                continue;
+            }
+
+            if ($translations = $this->translated()) {
+                $attributes[$field] = $translations->$field;
+            }
+        }
+
+        return $attributes;
+    }
+
+    /**
      * Give the user access to the translated fields from the main model.
      *
      * @param string $key
