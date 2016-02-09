@@ -37,8 +37,10 @@ abstract class Translatable extends Model
      * @param $language string|int
      * @return mixed
      */
-    public function scopeTranslated($query, $language)
+    public function scopeTranslated($query, $language = null)
     {
+        $language = empty($language) ? session('lang.id') : $language;
+
         return $query->with(['translations' => function(HasMany $q) use($language){
             $field = 'language_id';
 
@@ -65,7 +67,7 @@ abstract class Translatable extends Model
             $q
                 ->where($field, $language)
                 ->select($fields);
-        }]);
+        }])->first();
     }
 
     /**
