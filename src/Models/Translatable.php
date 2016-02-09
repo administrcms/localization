@@ -11,16 +11,6 @@ abstract class Translatable extends Model
     protected $transaltionModel = null;
 
     /**
-     * Relationship to the languages table.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
-     */
-    public function language()
-    {
-        return $this->hasOne(Language::class);
-    }
-
-    /**
      * Relationship to the translation table of the current model.
      *
      * @return HasMany
