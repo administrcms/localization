@@ -32,7 +32,7 @@ class LocalizationServiceProvider extends ServiceProvider
         $app = $this->app;
 
         $this->app->bind(Localizator::class, function() use ($app){
-            return new Localizator($app['app'], $app['session'], $app['url']);
+            return new Localizator($app['app'], $app['session.store'], $app['url']);
         });
 
         $this->app->alias(Localizator::class, 'administr.localizator');

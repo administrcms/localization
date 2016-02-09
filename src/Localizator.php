@@ -2,8 +2,9 @@
 
 namespace Administr\Localization;
 
+use Administr\Localization\Models\Language;
 use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Session\SessionManager as Session;
+use Illuminate\Session\Store as Session;
 use Illuminate\Contracts\Routing\UrlGenerator;
 
 class Localizator
@@ -24,13 +25,19 @@ class Localizator
      *
      * @param $locale
      */
-    public function set($locale)
+    public function set($locale = null)
     {
-        $this->session->put([
-            'locale'    => $locale
-        ]);
+        $locale = empty($locale) ? $this->app->getLocale() : $locale;
 
-        $this->app->setLocale($locale);
+        $language = Language::where('code', $locale)->first(['id', 'code']);
+
+        if(!$language) {
+            return;
+        }
+
+        session(['lang' => $language->toArray()]);
+
+        $this->app->setLocale($language->code);
     }
 
     /**
@@ -38,12 +45,18 @@ class Localizator
      */
     public function get()
     {
-        if( $this->session->has('locale') )
+        if( session()->has('lang') )
         {
-            return $this->session->get('locale');
+            return session('lang.code');
         }
 
         return $this->app->getLocale();
+    }
+
+    public function hasBeenSet($locale = null)
+    {
+        $locale = empty($locale) ? $this->app->getLocale() : $locale;
+        return session()->has('lang') && session('lang.code') == $locale;
     }
 
     public function route($name, $parameters = [], $absolute = true, $route = null)

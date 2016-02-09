@@ -16,12 +16,13 @@ class LocalizationMiddleware
      */
     public function handle($request, Closure $next)
     {
-        if( !session()->has('lang') )
+        $localizator  = app(Localizator::class);
+
+        $locale = $request->segment(1, app()->getLocale());
+
+        if( !$localizator->hasBeenSet($locale) )
         {
-            $language = Language::where('code', app()->getLocale())->first(['id', 'code']);
-            session(['lang' => $language->toArray()]);
-        } else {
-            app()->setLocale(session('lang.code'));
+            $localizator->set($locale);
         }
 
         return $next($request);
