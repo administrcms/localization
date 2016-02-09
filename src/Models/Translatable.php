@@ -20,6 +20,18 @@ abstract class Translatable extends Model
         return $this->hasMany($this->getTranslationModel(), $this->getTranslationRelationKey());
     }
 
+    public function translation($language)
+    {
+        return $this->translations->filter(function($translation) use ($language){
+            return $translation instanceof Model && $translation->language_id == $language;
+        })->first();
+    }
+
+    public function isTranslatedIn($language)
+    {
+        return $this->translation($language);
+    }
+
     /**
      * Get a translation for given language.
      *
@@ -74,8 +86,12 @@ abstract class Translatable extends Model
             $language = $language_id ? $language_id->id : session('lang.id');
         }
 
-        $translation = app( $this->getTranslationModel() );
-        $translation->setAttribute('language_id', $language);
+        if($this->hasTranslations() && $this->isTranslatedIn($language)) {
+            return $this->translation($language);
+        }
+
+        $translation = app($this->getTranslationModel());
+        $translation->language_id = $language;
         $this->translations->add($translation);
 
         return $translation;
@@ -89,6 +105,11 @@ abstract class Translatable extends Model
     public function hasTranslations()
     {
         return count($this->translations) > 0;
+    }
+
+    public function isTranslatable($field)
+    {
+        return in_array($field, $this->translatable);
     }
 
     /**
@@ -110,6 +131,89 @@ abstract class Translatable extends Model
     {
         return "{$this->table}_id";
     }
+
+    protected function saveTranslations()
+    {
+        $saved = true;
+        foreach ($this->translations as $translation) {
+            if ($saved && $this->isTranslationDirty($translation)) {
+                $translation->setAttribute($this->getTranslationRelationKey(), $this->getKey());
+                $saved = $translation->save();
+            }
+        }
+        return $saved;
+    }
+
+    /**
+     * @param \Illuminate\Database\Eloquent\Model $translation
+     *
+     * @return bool
+     */
+    protected function isTranslationDirty(Model $translation)
+    {
+        $dirtyAttributes = $translation->getDirty();
+        return count($dirtyAttributes) > 0;
+    }
+
+
+    /**
+     * @param array $options
+     *
+     * @return bool
+     */
+    public function save(array $options = [])
+    {
+        // Update
+        if ($this->exists) {
+
+            if (count($this->getDirty()) > 0) {
+                // If $this->exists and dirty, parent::save() has to return true. If not,
+                // an error has occurred. Therefore we shouldn't save the translations.
+                if (parent::save($options)) {
+                    return $this->saveTranslations();
+                }
+
+                return false;
+            }
+
+            // If $this->exists and not dirty, parent::save() skips saving and returns
+            // false. So we have to save the translations
+            if ($saved = $this->saveTranslations()) {
+                $this->fireModelEvent('saved', false);
+                $this->fireModelEvent('updated', false);
+            }
+
+            return $saved;
+        }
+
+        // Insert
+        if (parent::save($options)) {
+            // We save the translations only if the instance is saved in the database.
+            return $this->saveTranslations();
+        }
+
+        return false;
+    }
+
+    /**
+     * @param array $attributes
+     * @return $this
+     */
+    public function fill(array $attributes)
+    {
+        $language = array_key_exists('language_id', $attributes) ? $attributes['language_id'] : null;
+        $translation = $this->translate($language);
+
+        foreach ($attributes as $key => $value) {
+            if($this->isTranslatable($key) && $this->isFillable($key)) {
+                $translation->setAttribute($key, $value);
+                unset($attributes[$key]);
+            }
+        }
+
+        return parent::fill($attributes);
+    }
+
 
     /**
      * Add the translated fields to the model when cast to an array.
