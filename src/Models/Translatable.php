@@ -67,7 +67,28 @@ abstract class Translatable extends Model
             $q
                 ->where($field, $language)
                 ->select($fields);
-        }])->first();
+        }]);
+    }
+
+    /**
+     * Retrieve a new translation model and set its parent to the current model.
+     *
+     * @param int|string $language
+     * @return Model
+     */
+    public function translate($language = null)
+    {
+        if( !is_numeric($language) )
+        {
+            $language_id = Language::where('code', $language)->first(['id']);
+            $language = $language_id ? $language_id->id : session('lang.id');
+        }
+
+        $translation = app( $this->getTranslationModel() );
+        $translation->setAttribute('language_id', $language);
+        $this->translations->add($translation);
+
+        return $translation;
     }
 
     /**
@@ -115,7 +136,7 @@ abstract class Translatable extends Model
                 continue;
             }
 
-            if ($translations = $this->translated()) {
+            if ($translations = $this->translations->first()) {
                 $attributes[$field] = $translations->$field;
             }
         }
