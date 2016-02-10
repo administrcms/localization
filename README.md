@@ -43,7 +43,6 @@ You will have to create two tables - one that stores the main model data that is
 They can look something like this:
 
 ```php
-
 Schema::create('people', function (Blueprint $table) {
     $table->increments('id');
     $table->boolean('is_visible')->default(0);
@@ -63,13 +62,11 @@ Schema::create('people_translations', function (Blueprint $table) {
     $table->foreign('language_id')->references('id')->on('administr_languages')->onDelete('cascade');
     $table->foreign('person_id')->references('id')->on('people')->onDelete('cascade');
 });
-
 ```
 
 And the corresponding models:
 
 ```php
-
 // Person.php
 
 namespace App\Models;
@@ -92,7 +89,6 @@ class PersonTranslation extends Model
     protected $table = 'people_translations';
     protected $fillable = ['language_id', 'name', 'position'];
 }
-
 ```
 
 And then in your app code:
@@ -100,9 +96,13 @@ And then in your app code:
 ```php
  // Get the first model with translation in the current app locale
 $person = Person::translated()->first();
+
  // Translated in the language with id of 1
 $person = Person::translated(1)->first();
-// Translated in the language with code of 'bg' - have in mind that when you do it like this, an additional query will be made to find the language id
+
+// Translated in the language with code of 'bg'.
+// Have in mind that when you do it like this,
+// an additional query will be made to find the language id.
 $person = Person::translated('bg')->first();
 
 $person->name; // You can access the translation model properties through the main model
