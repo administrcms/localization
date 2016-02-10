@@ -103,7 +103,8 @@ abstract class Translatable extends Model
         }
 
         $translation = app($this->getTranslationModel());
-        $translation->language_id = $language;
+        $translation->setAttribute('language_id', $language);
+        $translation->setAttribute($this->getTranslationRelationKey(), $this->getKey());
         $this->translations->add($translation);
 
         return $translation;
