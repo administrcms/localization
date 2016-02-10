@@ -208,11 +208,10 @@ abstract class Translatable extends Model
     public function fill(array $attributes)
     {
         $language = array_key_exists('language_id', $attributes) ? $attributes['language_id'] : null;
-        $translation = $this->translate($language);
 
         foreach ($attributes as $key => $value) {
             if($this->isTranslatable($key) && $this->isFillable($key)) {
-                $translation->setAttribute($key, $value);
+                $this->translate($language)->setAttribute($key, $value);
                 unset($attributes[$key]);
             }
         }
