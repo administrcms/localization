@@ -142,7 +142,8 @@ abstract class Translatable extends Model
      */
     protected function getTranslationRelationKey()
     {
-        return "{$this->table}_id";
+        $table = str_singular($this->getTable());
+        return "{$table}_id";
     }
 
     protected function saveTranslations()
