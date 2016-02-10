@@ -20,6 +20,12 @@ abstract class Translatable extends Model
         return $this->hasMany($this->getTranslationModel(), $this->getTranslationRelationKey());
     }
 
+    /**
+     * Get the translation model in the given language.
+     *
+     * @param $language int
+     * @return Model|null
+     */
     public function translation($language)
     {
         return $this->translations->filter(function($translation) use ($language){
