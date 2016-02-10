@@ -27,9 +27,15 @@ abstract class Translatable extends Model
         })->first();
     }
 
+    /**
+     * Does the model have a translation in a given language.
+     *
+     * @param $language int
+     * @return bool
+     */
     public function isTranslatedIn($language)
     {
-        return $this->translation($language);
+        return (bool)$this->translation($language);
     }
 
     /**
