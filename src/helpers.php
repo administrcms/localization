@@ -13,10 +13,13 @@ if( !function_exists('change_locale') ) {
 
     function change_locale($locale) {
         $route = Route::current();
-        
-        $params = array_merge($route->parameters(), ['lang' => $locale]);
 
-        return router($route->getName(), $params);
+        $oldParams = $route->parameters();
+        unset($oldParams['lang']);
+
+        $params = array_merge([$locale], $oldParams);
+
+        return route($route->getName(), $params);
     }
 
 }
