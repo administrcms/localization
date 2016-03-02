@@ -8,6 +8,20 @@ use Closure;
 class LocalizationMiddleware
 {
     /**
+     * @var Localizator
+     */
+    private $localizator;
+
+    /**
+     * @param Localizator $localizator
+     */
+    public function __construct(Localizator $localizator)
+    {
+        $this->localizator = $localizator;
+    }
+
+
+    /**
      * Handle an incoming request.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -16,14 +30,9 @@ class LocalizationMiddleware
      */
     public function handle($request, Closure $next)
     {
-        $localizator  = app(Localizator::class);
-
         $locale = $request->segment(1, app()->getLocale());
 
-        if( !$localizator->hasBeenSet($locale) )
-        {
-            $localizator->set($locale);
-        }
+        $this->localizator->set($locale);
 
         return $next($request);
     }
