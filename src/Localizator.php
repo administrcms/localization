@@ -29,6 +29,11 @@ class Localizator
     {
         $locale = empty($locale) ? $this->app->getLocale() : $locale;
 
+        if($this->hasBeenSet($locale)) {
+            $this->app->setLocale($locale);
+            return;
+        }
+
         $language = Language::where('code', $locale)->first(['id', 'code']);
 
         if(!$language) {
