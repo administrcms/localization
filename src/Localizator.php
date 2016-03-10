@@ -37,7 +37,7 @@ class Localizator
         $language = Language::where('code', $locale)->first(['id', 'code']);
 
         if(!$language) {
-            return;
+            $language = Language::where('code', $this->app->getLocale())->first(['id', 'code']);
         }
 
         session(['lang' => $language->toArray()]);
