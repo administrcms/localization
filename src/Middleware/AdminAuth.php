@@ -3,6 +3,7 @@
 namespace Administr\Localization\Middleware;
 
 use Closure;
+use Auth;
 
 class AdminAuth
 {
@@ -17,7 +18,6 @@ class AdminAuth
     public function handle($request, Closure $next, $guard = null)
     {
         if (Auth::guard($guard)->guest()) {
-            dd(1);
             if ($request->ajax()) {
                 return response('Unauthorized.', 401);
             } else {
