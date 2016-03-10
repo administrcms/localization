@@ -1,6 +1,6 @@
 <?php
 
-namespace Administr\Localization;
+namespace Administr\Localization\Middleware;
 
 use Administr\Localization\Models\Language;
 use Closure;
