@@ -2,7 +2,7 @@
 
 namespace Administr\Localization\Middleware;
 
-use Administr\Localization\Models\Language;
+use Administr\Localization\Localizator;
 use Closure;
 
 class LocalizationMiddleware
