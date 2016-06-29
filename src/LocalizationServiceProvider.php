@@ -2,6 +2,7 @@
 
 namespace Administr\Localization;
 
+use Administr\Localization\Commands\MakeAdminModel;
 use Blade;
 use Illuminate\Support\ServiceProvider;
 
@@ -34,6 +35,10 @@ class LocalizationServiceProvider extends ServiceProvider
         $this->app->bind(Localizator::class, function() use ($app){
             return new Localizator($app['app'], $app['session.store'], $app['url']);
         });
+
+        $this->commands([
+           MakeAdminModel::class,
+        ]);
 
         $this->app->alias(Localizator::class, 'administr.localizator');
 

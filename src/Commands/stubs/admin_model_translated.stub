@@ -1,0 +1,11 @@
+<?php
+
+namespace DummyNamespace;
+
+use Administr\Localization\Models\Translatable;
+
+class DummyClass extends Translatable
+{
+    protected $fillable = [];
+    protected $translatable = [];
+}
