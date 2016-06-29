@@ -30,9 +30,10 @@ class LocalizationMiddleware
      */
     public function handle($request, Closure $next)
     {
-        $locale = $request->segment(1, app()->getLocale());
-
-        $this->localizator->set($locale);
+        if( ! app()->runningInConsole() ) {
+            $locale = $request->segment(1, app()->getLocale());
+            $this->localizator->set($locale);
+        }
 
         return $next($request);
     }
