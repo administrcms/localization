@@ -3,6 +3,8 @@
 namespace Administr\Localization\Commands;
 
 use Illuminate\Console\GeneratorCommand;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputOption;
 
 class MakeAdminModel extends GeneratorCommand
 {
@@ -11,7 +13,7 @@ class MakeAdminModel extends GeneratorCommand
      *
      * @var string
      */
-    protected $signature = 'administr:model {name}';
+    protected $name = 'administr:model';
 
     /**
      * The console command description.
@@ -31,6 +33,8 @@ class MakeAdminModel extends GeneratorCommand
     {
         if (parent::fire() !== false && $this->option('translated')) {
             $name = $this->getNameInput();
+
+            $this->type = 'Admin model translation class';
 
             $this->call('administr:model', ['name' => "{$name}Translation"]);
         }
