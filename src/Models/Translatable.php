@@ -10,6 +10,20 @@ abstract class Translatable extends Model
     protected $translatable = [];
     protected $transaltionModel = null;
 
+    protected $language_id;
+
+    /**
+     * Set current language
+     *
+     * @param $language_id
+     * @return $this
+     */
+    public function language($language_id)
+    {
+        $this->language_id = $language_id;
+        return $this;
+    }
+
     /**
      * Relationship to the translation table of the current model.
      *
