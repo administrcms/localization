@@ -232,7 +232,7 @@ abstract class Translatable extends Model
         $language = array_get($attributes, 'language_id', $this->language_id);
 
         foreach ($attributes as $key => $value) {
-            if($this->isTranslatable($key) && $this->isFillable($key)) {
+            if($this->isTranslatable($key)) {
                 $this->translate($language)->setAttribute($key, $value);
                 unset($attributes[$key]);
             }
