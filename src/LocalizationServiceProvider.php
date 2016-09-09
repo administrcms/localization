@@ -19,7 +19,7 @@ class LocalizationServiceProvider extends ServiceProvider
         ], 'seeds');
 
         $this->publishes([
-            __DIR__ . '/Config/localization.php' => config_path('localization.php')
+            __DIR__ . '/Config/localization.php' => config_path('administr.localization.php')
         ], 'config');
     }
 
@@ -42,6 +42,6 @@ class LocalizationServiceProvider extends ServiceProvider
 
         $this->app->alias(Localizator::class, 'administr.localizator');
 
-        $this->mergeConfigFrom(__DIR__ . '/Config/localization.php', 'localization');
+        $this->mergeConfigFrom(__DIR__ . '/Config/localization.php', 'administr.localization');
     }
 }
