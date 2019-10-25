@@ -4,6 +4,8 @@ namespace Administr\Localization\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 
 abstract class Translatable extends Model
 {
@@ -156,8 +158,7 @@ abstract class Translatable extends Model
      */
     protected function getTranslationRelationKey()
     {
-        $table = str_singular($this->getTable());
-        return "{$table}_id";
+        return Str::singular($this->getTable()) . '_id';
     }
 
     protected function saveTranslations()
@@ -229,7 +230,7 @@ abstract class Translatable extends Model
      */
     public function fill(array $attributes)
     {
-        $language = array_get($attributes, 'language_id', $this->language_id);
+        $language = Arr::get($attributes, 'language_id', $this->language_id);
 
         foreach ($attributes as $key => $value) {
             if($this->isTranslatable($key)) {
